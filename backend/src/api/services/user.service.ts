@@ -93,7 +93,10 @@ class UserService {
       const response = await axios.post(
         `${API_BASE_URL}/powerpoint-report`,
         reportData,
-        { headers }
+        { 
+          headers,
+          timeout: 120000 // 2 minutes timeout
+        }
       );
 
       return response.data;
