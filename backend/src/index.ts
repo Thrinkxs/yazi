@@ -26,6 +26,8 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:4200",
   "https://api-dev.askyazi.co",
+  "https://yazi-r9qu.onrender.com",
+  "https://yazi-seven.vercel.app"
   
 ];
 const corsOptions = {

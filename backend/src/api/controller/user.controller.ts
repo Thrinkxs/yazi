@@ -17,7 +17,8 @@ export const getCampaignById = async (
       throw new AppError(400, "Campaign ID is required");
     }
 
-    const campaign = await UserService.getCampaignById(campaignId);
+    const idToken = req.user?.idToken;
+    const campaign = await UserService.getCampaignById(campaignId, idToken);
 
     res.status(200).json({
       success: true,
@@ -43,7 +44,8 @@ export const getSurveyGraphResults = async (
       throw new AppError(400, "Campaign ID is required");
     }
 
-    const results = await UserService.getSurveyGraphResults(campaignId);
+    const idToken = req.user?.idToken;
+    const results = await UserService.getSurveyGraphResults(campaignId, idToken);
 
     res.status(200).json({
       success: true,
@@ -69,7 +71,8 @@ export const generatePowerPointReport = async (
       throw new AppError(400, "Report data is required");
     }
 
-    const result = await UserService.generatePowerPointReport(reportData);
+    const idToken = req.user?.idToken;
+    const result = await UserService.generatePowerPointReport(reportData, idToken);
 
     res.status(200).json({
       success: true,
@@ -95,7 +98,8 @@ export const getPowerPointStatus = async (
       throw new AppError(400, "Filename query parameter is required");
     }
 
-    const result = await UserService.getPowerPointStatus(filename);
+    const idToken = req.user?.idToken;
+    const result = await UserService.getPowerPointStatus(filename, idToken);
 
     res.status(200).json({
       success: true,

@@ -50,6 +50,7 @@ export const authenticateToken = async (
       username: payload.username,
       email: payload.email,
       tokenUse: payload.token_use,
+      idToken: req.cookies["id-token"] || null, // Store ID token for external API calls
     };
 
     next();

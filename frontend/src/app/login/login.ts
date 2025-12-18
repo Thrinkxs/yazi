@@ -40,11 +40,8 @@ export class LoginComponent {
 
       console.log('Login successful:', response);
       
-      // Set authorization header for future requests
-      this.authService.setAuthorizationHeader(response.data.accessToken);
-      
       // Show success toast
-      toast.success('Login successful! Redirecting...');
+      toast.success('Login successful!');
       
       // Navigate to dashboard
       this.router.navigate(['/dashboard']);

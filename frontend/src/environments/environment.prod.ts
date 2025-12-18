@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-api.com/api'
+  apiUrl: 'https://yazi-r9qu.onrender.com/api'
 };

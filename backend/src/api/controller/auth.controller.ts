@@ -30,6 +30,13 @@ export const loginController = async (
       maxAge: (response.expiresIn || 3600) * 1000,
     });
 
+    res.cookie("id-token", response.idToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: (response.expiresIn || 3600) * 1000,
+    });
+
     res.cookie("refresh-token", response.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -61,6 +68,7 @@ export const logoutController = async (
   try {
     // Clear cookies
     res.clearCookie("access-token");
+    res.clearCookie("id-token");
     res.clearCookie("refresh-token");
 
     return res.status(200).json({

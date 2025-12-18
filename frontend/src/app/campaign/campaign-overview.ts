@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CampaignService, CampaignDetails, SurveyGraphResults } from '../services/campaign.service';
+import { CampaignService, CampaignDetails, PowerPointRequest } from '../services/campaign.service';
 import { AuthService } from '../services/auth.service';
 import { toast } from 'ngx-sonner';
 
@@ -13,11 +13,12 @@ import { toast } from 'ngx-sonner';
 })
 export class CampaignOverviewComponent implements OnInit {
   campaign = signal<CampaignDetails | null>(null);
-  surveyResults = signal<SurveyGraphResults | null>(null);
   loading = signal(true);
-  loadingResults = signal(false);
+  generatingPowerPoint = signal(false);
+  checkingStatus = signal(false);
+  downloadUrl = signal<string | null>(null);
+  powerPointFileName = signal<string | null>(null);
   error = signal('');
-  resultsError = signal('');
   campaignId = signal('');
 
   constructor(
@@ -49,9 +50,6 @@ export class CampaignOverviewComponent implements OnInit {
       const data = await this.campaignService.getCampaignById(campaignId);
       this.campaign.set(data);
       
-      // Load survey results after campaign details
-      await this.loadSurveyResults(campaignId);
-      
     } catch (error: any) {
       this.error.set(error.message || 'Failed to load campaign');
       toast.error('Failed to load campaign details');
@@ -61,24 +59,8 @@ export class CampaignOverviewComponent implements OnInit {
     }
   }
 
-  async loadSurveyResults(campaignId: string) {
-    try {
-      this.loadingResults.set(true);
-      this.resultsError.set('');
-      
-      const results = await this.campaignService.getSurveyGraphResults(campaignId);
-      this.surveyResults.set(results);
-      
-    } catch (error: any) {
-      this.resultsError.set(error.message || 'Failed to load survey results');
-      console.error('Survey results load error:', error);
-    } finally {
-      this.loadingResults.set(false);
-    }
-  }
-
-  getDistributionEntries(distribution: Record<string, number>): Array<[string, number]> {
-    return Object.entries(distribution);
+  viewSurveyResults() {
+    this.router.navigate([`/survey-results/${this.campaignId()}`]);
   }
 
   async logout() {

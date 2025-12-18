@@ -10,12 +10,19 @@ class UserService {
   /**
    * Fetch campaign details by ID
    * @param campaignId - The campaign ID to fetch
+   * @param idToken - The ID token for authorization
    * @returns Campaign details
    */
-  async getCampaignById(campaignId: string) {
+  async getCampaignById(campaignId: string, idToken?: string) {
     try {
+      const headers: any = {};
+      if (idToken) {
+        headers.Authorization = `Bearer ${idToken}`;
+      }
+
       const response = await axios.get(
-        `${API_BASE_URL}/campaigns/${campaignId}`
+        `${API_BASE_URL}/campaigns/${campaignId}`,
+        { headers }
       );
 
       return response.data;
@@ -38,12 +45,19 @@ class UserService {
   /**
    * Fetch survey graph results by campaign ID
    * @param campaignId - The campaign ID to fetch survey results for
+   * @param idToken - The ID token for authorization
    * @returns Survey graph results
    */
-  async getSurveyGraphResults(campaignId: string) {
+  async getSurveyGraphResults(campaignId: string, idToken?: string) {
     try {
+      const headers: any = {};
+      if (idToken) {
+        headers.Authorization = `Bearer ${idToken}`;
+      }
+
       const response = await axios.get(
-        `${API_BASE_URL}/campaigns/${campaignId}/survey-graph-results`
+        `${API_BASE_URL}/campaigns/${campaignId}/survey-graph-results`,
+        { headers }
       );
 
       return response.data;
@@ -66,13 +80,20 @@ class UserService {
   /**
    * Generate PowerPoint report
    * @param reportData - The PowerPoint request data
+   * @param idToken - The ID token for authorization
    * @returns PowerPoint response
    */
-  async generatePowerPointReport(reportData: any) {
+  async generatePowerPointReport(reportData: any, idToken?: string) {
     try {
+      const headers: any = {};
+      if (idToken) {
+        headers.Authorization = `Bearer ${idToken}`;
+      }
+
       const response = await axios.post(
         `${API_BASE_URL}/powerpoint-report`,
-        reportData
+        reportData,
+        { headers }
       );
 
       return response.data;
@@ -92,14 +113,21 @@ class UserService {
   /**
    * Get PowerPoint report status
    * @param filename - The filename to check status for
+   * @param idToken - The ID token for authorization
    * @returns PDF response
    */
-  async getPowerPointStatus(filename: string) {
+  async getPowerPointStatus(filename: string, idToken?: string) {
     try {
+      const headers: any = {};
+      if (idToken) {
+        headers.Authorization = `Bearer ${idToken}`;
+      }
+
       const response = await axios.get(
         `${API_BASE_URL}/powerpoint-status`,
         {
-          params: { filename }
+          params: { filename },
+          headers
         }
       );
 

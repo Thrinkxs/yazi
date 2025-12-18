@@ -22,6 +22,7 @@ export interface LoginResponse {
 export class AuthService {
   private api: AxiosInstance;
   private accessToken: string | null = null;
+  private idToken: string | null = null;
 
   constructor() {
     this.api = axios.create({
@@ -31,14 +32,28 @@ export class AuthService {
       },
       withCredentials: true,
     });
+
+    // Add request interceptor to automatically include accessToken for authentication
+    this.api.interceptors.request.use(
+      (config) => {
+        if (this.accessToken) {
+          config.headers.Authorization = `Bearer ${this.accessToken}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
   }
 
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
       const response = await this.api.post<LoginResponse>('/auth/login', credentials);
       
-      // Store the access token
+      // Store both tokens
       this.accessToken = response.data.data.accessToken;
+      this.idToken = response.data.data.idToken;
       
       return response.data;
     } catch (error: any) {
@@ -53,10 +68,12 @@ export class AuthService {
     try {
       await this.api.post('/auth/logout');
       this.accessToken = null;
+      this.idToken = null;
     } catch (error: any) {
       console.error('Logout error:', error);
-      // Clear token even if request fails
+      // Clear tokens even if request fails
       this.accessToken = null;
+      this.idToken = null;
     }
   }
 
@@ -64,12 +81,16 @@ export class AuthService {
     return this.accessToken;
   }
 
+  getIdToken(): string | null {
+    return this.idToken;
+  }
+
   isAuthenticated(): boolean {
     return !!this.accessToken;
   }
 
-  // Add token to requests
+  // Deprecated: Authorization header is now set automatically via interceptor
   setAuthorizationHeader(token: string): void {
-    this.api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    // No longer needed - kept for backward compatibility
   }
 }
