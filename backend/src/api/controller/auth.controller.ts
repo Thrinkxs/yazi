@@ -23,24 +23,26 @@ export const loginController = async (
     const response = await authService.login(email, password);
 
     // Set tokens in httpOnly cookies
+    const isProduction = process.env.NODE_ENV === "production";
+    
     res.cookie("access-token", response.accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "strict",
       maxAge: (response.expiresIn || 3600) * 1000,
     });
 
     res.cookie("id-token", response.idToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "strict",
       maxAge: (response.expiresIn || 3600) * 1000,
     });
 
     res.cookie("refresh-token", response.refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
