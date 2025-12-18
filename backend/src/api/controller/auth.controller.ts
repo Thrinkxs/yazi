@@ -22,28 +22,51 @@ export const loginController = async (
 
     const response = await authService.login(email, password);
 
+
+    // Note: Normally this would be the most secured way to set the cookies including using the domain
+
     // Set tokens in httpOnly cookies
-    const isProduction = process.env.NODE_ENV === "production";
-    
+    // res.cookie("access-token", response.accessToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    //   maxAge: (response.expiresIn || 3600) * 1000,
+    //  domain: ".askyazi.com"
+    // });
+
+    // res.cookie("id-token", response.idToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    //   maxAge: (response.expiresIn || 3600) * 1000,
+    //   domain: ".askyazi.com"
+    // });
+
+    // res.cookie("refresh-token", response.refreshToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    //   domain: ".askyazi.com" 
+    // });
+
     res.cookie("access-token", response.accessToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "strict",
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "lax",
       maxAge: (response.expiresIn || 3600) * 1000,
     });
-
     res.cookie("id-token", response.idToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "strict",
-      maxAge: (response.expiresIn || 3600) * 1000,
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //     sameSite: "lax",
+        maxAge: (response.expiresIn || 3600) * 1000,
     });
-
     res.cookie("refresh-token", response.refreshToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    //   httpOnly: true,
+    //     secure: process.env.NODE_ENV === "production",
+    //     sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     return res.status(200).json({
