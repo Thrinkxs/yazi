@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx jest",
-    "start": "node build/index.js",
+    "start": "node build/src/index.js",
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "build": "npx tsc -p .",
     "deploy": "npm i npm@7 && npm i && npm i typescript && npx tsc -p ."
