@@ -53,19 +53,19 @@ export const loginController = async (
     res.cookie("access-token", response.accessToken, {
     //   httpOnly: true,
     //   secure: process.env.NODE_ENV === "production",
-    //   sameSite: "lax",
+      sameSite: "none",
       maxAge: (response.expiresIn || 3600) * 1000,
     });
     res.cookie("id-token", response.idToken, {
     //   httpOnly: true,
     //   secure: process.env.NODE_ENV === "production",
-    //     sameSite: "lax",
+        sameSite: "none",
         maxAge: (response.expiresIn || 3600) * 1000,
     });
     res.cookie("refresh-token", response.refreshToken, {
     //   httpOnly: true,
     //     secure: process.env.NODE_ENV === "production",
-    //     sameSite: "lax",
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 

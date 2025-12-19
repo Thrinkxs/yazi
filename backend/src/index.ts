@@ -12,6 +12,7 @@ import AppError from "./utils/AppError";
 
 import authRoute from "./api/routes/auth.route";
 import userRoute from "./api/routes/user.route";
+import { KeepRenderAwake } from "./utils/KeepRenderAwake";
 
 
 // dotenv.config();
@@ -52,7 +53,7 @@ mongoose
     console.log("Error connecting to MongoDB: ", error);
   });
 
-
+KeepRenderAwake();
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express server is running on Render Cloud");
